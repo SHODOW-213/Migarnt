@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Migrant</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Migrant is a free local community for people who just moved to a new city. Ask locals, avoid scams and see what is happening near you.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Figtree:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: auto-rickshaw palette (Bengaluru green and yellow). Hero pairs the promise with the join form; a feed preview shows what the community feels like; a dark band maps each newcomer pain to an answer; then features, steps, guides and partners, FAQ. */
+:root{
+  --bg:#F2F5EC; --surface:#FFFFFF; --ink:#10231B; --muted:#4D5F55; --line:#D5DDCB;
+  --green:#0E6B3B; --green-ink:#FFFFFF; --signal:#F5C400; --signal-ink:#10231B;
+  --band:#10231B; --band-ink:#EAF1E4; --band-muted:#A9BBB0; --danger:#B3261E;
+  --f-display:'Bricolage Grotesque','Trebuchet MS',Arial,sans-serif;
+  --f-body:'Figtree',Arial,sans-serif;
+  --f-mono:'JetBrains Mono','Courier New',monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1510; --surface:#13221A; --ink:#EAF1E4; --muted:#A3B5AA; --line:#25382D;
+    --green:#3DBE7A; --green-ink:#07130C; --signal:#F5C400; --signal-ink:#10231B;
+    --band:#13221A; --band-ink:#EAF1E4; --band-muted:#A3B5AA; --danger:#FF8A80; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1510; --surface:#13221A; --ink:#EAF1E4; --muted:#A3B5AA; --line:#25382D;
+  --green:#3DBE7A; --green-ink:#07130C; --signal:#F5C400; --signal-ink:#10231B;
+  --band:#13221A; --band-ink:#EAF1E4; --band-muted:#A3B5AA; --danger:#FF8A80; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:18px;line-height:1.55}
+h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance;line-height:1.08;letter-spacing:-0.01em}
+p{margin:0}
+a{color:inherit}
+.wrap{max-width:1120px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.band{padding-block:72px}
+.eyebrow{font-family:var(--f-mono);font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--green);font-weight:500}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:12px 22px;border-radius:10px;border:2px solid transparent;font:700 17px var(--f-body);cursor:pointer;text-decoration:none}
+.btn-primary{background:var(--signal);color:var(--signal-ink)}
+.btn-primary:hover{filter:brightness(.95)}
+.btn-ghost{background:transparent;border-color:var(--ink);color:var(--ink)}
+:focus-visible{outline:3px solid var(--green);outline-offset:3px}
+
+/* header */
+.top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:20px}
+.logo{font-family:var(--f-display);font-weight:800;font-size:26px;text-decoration:none;display:flex;align-items:center;gap:10px}
+.logo i{display:inline-block;width:14px;height:14px;border-radius:50%;background:var(--signal);box-shadow:0 0 0 4px var(--green)}
+.top nav{display:flex;gap:20px;font-size:16px;font-weight:500}
+.top nav a{text-decoration:none;color:var(--muted)}
+.top nav a:hover{color:var(--ink)}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:start;padding-block:32px 72px}
+.hero h1{font-size:clamp(40px,6vw,68px);font-weight:800}
+.hero h1 em{font-style:normal;background:linear-gradient(transparent 62%,var(--signal) 62%)}
+.lede{margin-top:20px;font-size:20px;color:var(--muted);max-width:34em}
+.ticks{list-style:none;padding:0;margin:28px 0 0;display:grid;gap:12px}
+.ticks li{display:flex;gap:12px;align-items:flex-start}
+.ticks li::before{content:"";flex:none;width:22px;height:22px;margin-top:3px;border-radius:50%;background:var(--green) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12.5l4 4 8-9' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/16px no-repeat}
+.price{margin-top:28px;display:inline-flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.price strong{font-family:var(--f-display);font-size:40px;font-weight:800}
+.price span{color:var(--muted);font-size:16px}
+
+/* forms */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:28px}
+.card h2{font-size:28px}
+.card .sub{margin-top:6px;color:var(--muted);font-size:16px}
+form{display:grid;gap:14px;margin-top:20px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+label{display:grid;gap:6px;font-size:15px;font-weight:700;min-width:0}
+input,select{width:100%;min-height:46px;padding:10px 12px;border-radius:8px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);font:400 16px var(--f-body)}
+input:focus,select:focus{border-color:var(--green)}
+.check{display:flex;gap:10px;align-items:flex-start;font-weight:400;font-size:14px;color:var(--muted)}
+.check input{width:20px;min-height:20px;margin-top:2px;flex:none}
+.msg{padding:14px 16px;border-radius:10px;font-size:16px;font-weight:500}
+.msg.ok{background:color-mix(in srgb,var(--green) 16%,var(--surface));border:1px solid var(--green)}
+.msg.err{background:color-mix(in srgb,var(--danger) 14%,var(--surface));border:1px solid var(--danger)}
+.fine{font-size:14px;color:var(--muted)}
+
+/* feed preview */
+.sec-head{max-width:30em}
+.sec-head h2{font-size:clamp(30px,4vw,44px);margin-top:10px}
+.sec-head p{margin-top:14px;color:var(--muted)}
+.feed{margin-top:36px;display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.post{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px;display:grid;gap:12px;align-content:start;min-width:0}
+.pill{display:inline-block;width:fit-content;font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:999px;background:var(--signal);color:var(--signal-ink);font-weight:500}
+.pill.alert{background:transparent;border:1.5px solid var(--danger);color:var(--danger)}
+.pill.soft{background:color-mix(in srgb,var(--green) 16%,var(--surface));color:var(--ink)}
+.post .text{font-size:18px;font-weight:500}
+.post .reply{border-left:3px solid var(--green);padding-left:12px;color:var(--muted);font-size:16px}
+.post .meta{font-size:14px;color:var(--muted)}
+
+/* problem band */
+.dark{background:var(--band);color:var(--band-ink)}
+.dark .eyebrow{color:var(--signal)}
+.dark h2{font-size:clamp(30px,4vw,44px);margin-top:10px;max-width:20em}
+.signals{margin-top:36px;display:grid;grid-template-columns:repeat(2,1fr);gap:0 48px}
+.signals div{padding-block:18px;border-top:1px solid color-mix(in srgb,var(--band-ink) 22%,transparent);display:grid;grid-template-columns:104px 1fr;gap:6px 16px}
+.signals b{font-family:var(--f-mono);font-size:13px;color:var(--signal);letter-spacing:.08em;text-transform:uppercase;padding-top:5px}
+.signals span{color:var(--band-muted)}
+.signals strong{color:var(--band-ink);font-weight:700;display:block}
+
+/* features */
+.pack{margin-top:36px;display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.pack article{border-top:3px solid var(--green);padding-top:16px}
+.pack h3{font-size:24px}
+.pack p{margin-top:8px;color:var(--muted);font-size:17px}
+.pack .tag{display:inline-block;margin-top:12px;font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--green)}
+
+/* steps */
+.steps{margin-top:36px;list-style:none;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:24px;counter-reset:s}
+.steps li{counter-increment:s;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px}
+.steps li::before{content:"Step " counter(s);font-family:var(--f-mono);font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--green)}
+.steps h3{font-size:22px;margin-top:8px}
+.steps p{margin-top:8px;color:var(--muted);font-size:16px}
+
+/* partners */
+.partner{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+.partner ul{margin:18px 0 0;padding-left:20px;color:var(--muted)}
+.partner li{margin-top:6px}
+
+/* faq */
+.faq{margin-top:28px;max-width:760px}
+details{border-top:1px solid var(--line);padding-block:16px}
+details:last-of-type{border-bottom:1px solid var(--line)}
+summary{cursor:pointer;font-weight:700;font-size:18px}
+details p{margin-top:10px;color:var(--muted)}
+
+footer{padding-block:40px 56px;color:var(--muted);font-size:15px}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+@media (max-width:860px){
+  .hero,.partner{grid-template-columns:1fr;gap:32px}
+  .steps{grid-template-columns:1fr}
+  .signals,.pack,.feed{grid-template-columns:1fr}
+  .band{padding-block:56px}
+  .top nav a:not(.keep){display:none}
+}
+@media (max-width:480px){
+  body{font-size:17px}
+  .row2{grid-template-columns:1fr}
+  .card{padding:22px}
+  .signals div{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <a class="logo" href="#top"><i aria-hidden="true"></i>Migrant</a>
+    <nav aria-label="Main">
+      <a href="#inside">Inside Migrant</a>
+      <a href="#features">What you get</a>
+      <a href="#partners">Guides and businesses</a>
+      <a class="keep" href="#join"><b>Join free</b></a>
+    </nav>
+  </header>
+</div>
+
+<main id="top">
+  <section class="wrap hero">
+    <div>
+      <p class="eyebrow">Free for newcomers · Bangalore first</p>
+      <h1 style="margin-top:14px">Your new city, explained by the people <em>who live in it.</em></h1>
+      <p class="lede">Migrant is a free community for people who just moved. Ask locals, spot scams before they cost you, and see what is opening, hiring and happening near you.</p>
+      <ul class="ticks">
+        <li><span>Ask real locals about rent, PGs, fares and everyday life, and get answers you can trust</span></li>
+        <li><span>Verified places and honest reviews from people who lived there, not broker listings</span></li>
+        <li><span>A live feed of new shops, flats, PGs, tiffin services and jobs in your area, plus people to meet</span></li>
+      </ul>
+      <p class="price"><strong id="priceText">Free</strong><span>for newcomers. No subscription and no fees to join or use.</span></p>
+    </div>
+
+    <div class="card" id="join">
+      <h2>Join the waitlist</h2>
+      <p class="sub">Tell us when you arrive. We invite you as soon as your area opens.</p>
+      <form id="reserveForm" novalidate>
+        <input type="hidden" name="type" value="newcomer">
+        <label for="r-name">Full name
+          <input id="r-name" name="name" type="text" autocomplete="name" required>
+        </label>
+        <label for="r-phone">WhatsApp number
+          <input id="r-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+91" required>
+        </label>
+        <div class="row2">
+          <label for="r-date">Arrival date
+            <input id="r-date" name="arrival" type="date" required>
+          </label>
+          <label for="r-as">I am moving as
+            <select id="r-as" name="moving_as">
+              <option>A new job</option>
+              <option>College or course</option>
+              <option>Internship</option>
+              <option>Something else</option>
+            </select>
+          </label>
+        </div>
+        <label for="r-org">Employer or college
+          <input id="r-org" name="organisation" type="text" autocomplete="organization">
+        </label>
+        <label for="r-area">Area you are moving to
+          <input id="r-area" name="area" type="text" placeholder="For example Koramangala or Whitefield">
+        </label>
+        <label class="check" for="r-consent">
+          <input id="r-consent" name="consent" type="checkbox" required>
+          <span>I agree that Migrant may store these details and contact me on WhatsApp about my move.</span>
+        </label>
+        <button class="btn btn-primary" type="submit" id="r-btn">Join free</button>
+        <div id="r-msg" role="status" aria-live="polite" hidden></div>
+        <a class="btn btn-ghost" id="wa1" href="#" target="_blank" rel="noopener" hidden>Chat on WhatsApp instead</a>
+      </form>
+    </div>
+  </section>
+
+  <section class="band" id="inside" style="background:var(--surface);border-block:1px solid var(--line)">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Inside Migrant</p>
+        <h2>A community feed built around where you live.</h2>
+        <p>Locals answer, residents report prices and scams, and your area shows what is new. These are example posts that show how Migrant will work.</p>
+      </div>
+      <div class="feed">
+        <article class="post">
+          <span class="pill">Ask a local</span>
+          <p class="text">Moving to Koramangala next week. How do I check a PG is genuine before I pay the deposit?</p>
+          <p class="reply"><b>Local guide:</b> Visit in person, ask for a written agreement, and speak to a current tenant before you pay anything.</p>
+          <p class="meta">Example post</p>
+        </article>
+        <article class="post">
+          <span class="pill soft">Fare check</span>
+          <p class="text">The auto driver from the bus stop to my PG refused the meter and quoted a fixed price at night. Is that normal?</p>
+          <p class="reply"><b>Resident:</b> Ask for the meter first. Add what you actually paid so the next newcomer on this route knows the usual fare.</p>
+          <p class="meta">Example post</p>
+        </article>
+        <article class="post">
+          <span class="pill alert">Scam alert</span>
+          <p class="text">A broker asked for a fee before showing any flat. Several residents have reported the same number this week.</p>
+          <p class="reply"><b>Local guide:</b> Never pay before a viewing. We have added this number to the warning list.</p>
+          <p class="meta">Example post</p>
+        </article>
+        <article class="post">
+          <span class="pill soft">New nearby</span>
+          <p class="text">A new tiffin service just opened in your area. Early members get a free trial meal.</p>
+          <p class="reply">Reviews from people who have eaten there appear below the post once they have tried it.</p>
+          <p class="meta">Example post</p>
+        </article>
+        <article class="post">
+          <span class="pill soft">Hiring nearby</span>
+          <p class="text">Three companies in your area posted junior roles this week.</p>
+          <p class="reply">See what skills are in demand around you and who is hiring close to home.</p>
+          <p class="meta">Example post</p>
+        </article>
+        <article class="post">
+          <span class="pill soft">Meet people</span>
+          <p class="text">Saturday morning walk and coffee for newcomers. Open to everyone who just moved.</p>
+          <p class="reply">Hosted by a local guide in a public place, so nobody has to arrive alone.</p>
+          <p class="meta">Example post</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="dark band" aria-labelledby="sig-h">
+    <div class="wrap">
+      <p class="eyebrow">Why newcomers need this</p>
+      <h2 id="sig-h">The first month is where people lose money and feel alone.</h2>
+      <div class="signals">
+        <div><b>Scammed</b><span><strong>Brokers and fake listings</strong>Verified places and reviews from people who lived there, so you can check before you pay.</span></div>
+        <div><b>Overcharged</b><span><strong>Fares and prices set by who looks new</strong>Prices by area, reported by residents, so you know what is fair.</span></div>
+        <div><b>Lonely</b><span><strong>No friends, no one to ask</strong>A community of locals and fellow newcomers, with meetups in public places.</span></div>
+        <div><b>Lost</b><span><strong>No idea what is around you</strong>A live feed of what is opening, hiring and happening in your area.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="features">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">What you get, free</p>
+        <h2>Everything a newcomer needs to settle in, in one place.</h2>
+      </div>
+      <div class="pack">
+        <article>
+          <h3>Ask locals anything</h3>
+          <p>Post a question and get answers from people who live in your area, with local guides stepping in when it matters.</p>
+          <span class="tag">Community</span>
+        </article>
+        <article>
+          <h3>Verified places and reviews</h3>
+          <p>PGs, flats, landlords, tiffin services and shops with honest reviews from people who actually used them.</p>
+          <span class="tag">Trust</span>
+        </article>
+        <article>
+          <h3>What is happening near you</h3>
+          <p>New openings, vacancies, jobs in demand, events and alerts for your area, so there is always something new to see.</p>
+          <span class="tag">Live feed</span>
+        </article>
+        <article>
+          <h3>Fair prices and fares</h3>
+          <p>Rent, deposits, autos, cabs and tiffins by area, reported by residents, so you can spot overcharging.</p>
+          <span class="tag">Transparency</span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="how" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">How it works</p>
+        <h2>From new in town to local, in three steps.</h2>
+      </div>
+      <ol class="steps">
+        <li><h3>Join</h3><p>Tell us where you are moving and when. It is free.</p></li>
+        <li><h3>Ask, check and explore</h3><p>Get answers, check places and prices, and follow what is happening in your area.</p></li>
+        <li><h3>Settle in and give back</h3><p>Share what you learn, help the next newcomer and become part of the neighbourhood.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="band" id="partners" style="background:var(--surface);border-block:1px solid var(--line)">
+    <div class="wrap partner">
+      <div>
+        <p class="eyebrow">For local guides and businesses</p>
+        <h2 style="font-size:clamp(30px,4vw,44px);margin-top:10px">Run your area, or reach the people in it.</h2>
+        <ul>
+          <li>Local guides: run the community in your area, help newcomers and earn a share of the local revenue it creates.</li>
+          <li>PGs, shops and tiffin services: reach newcomers who are deciding where to live and eat.</li>
+          <li>Employers and colleges: onboard new joiners and post roles in the area.</li>
+        </ul>
+        <p class="fine" style="margin-top:18px">Launching first in Koramangala and HSR Layout.</p>
+      </div>
+      <div class="card" style="background:var(--bg)">
+        <h2 style="font-size:24px">Get in touch</h2>
+        <form id="partnerForm" novalidate>
+          <input type="hidden" name="type" value="partner">
+          <label for="p-name">Your name
+            <input id="p-name" name="name" type="text" autocomplete="name" required>
+          </label>
+          <label for="p-phone">WhatsApp number
+            <input id="p-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+91" required>
+          </label>
+          <label for="p-role">You are a
+            <select id="p-role" name="role">
+              <option>Local guide (run an area)</option>
+              <option>PG owner or landlord</option>
+              <option>Shop or tiffin service</option>
+              <option>HR or relocation team</option>
+              <option>College or institute</option>
+            </select>
+          </label>
+          <label for="p-org">Business, area or organisation
+            <input id="p-org" name="organisation" type="text" autocomplete="organization">
+          </label>
+          <label class="check" for="p-consent">
+            <input id="p-consent" name="consent" type="checkbox" required>
+            <span>I agree that Migrant may store these details and contact me.</span>
+          </label>
+          <button class="btn btn-primary" type="submit" id="p-btn">Request a call</button>
+          <div id="p-msg" role="status" aria-live="polite" hidden></div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <div class="sec-head"><p class="eyebrow">Questions</p><h2>Before you join.</h2></div>
+      <div class="faq">
+        <details><summary>Does it cost anything?</summary><p>No. Migrant is free for everyone who joins. There is no subscription and no fee to use it.</p></details>
+        <details><summary>How does Migrant earn money?</summary><p>Local businesses, PGs and employers pay to reach people on Migrant, and local guides share in the revenue their area creates. Newcomers never pay.</p></details>
+        <details><summary>How do you keep listings and reviews honest?</summary><p>Places are checked before they are marked verified, reviews come from verified members who have used the place, and local guides moderate each area.</p></details>
+        <details><summary>Which areas do you cover?</summary><p>We start with Koramangala and HSR Layout in Bangalore, then expand to other areas and cities based on demand.</p></details>
+        <details><summary>What happens to my details?</summary><p>We collect only what is needed to contact you and set up your area. We do not sell your information, and you can ask us to delete it at any time.</p></details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Migrant · Bangalore</span>
+    <a id="wa2" href="#" target="_blank" rel="noopener" hidden>Talk to us on WhatsApp</a>
+  </div>
+</footer>
+
+<script>
+/* ---- Edit these before you deploy ---- */
+var CONFIG = {
+  endpoint: "",          /* Form backend URL (Formspree, Web3Forms or a Google Apps Script). Leave empty for preview mode. */
+  whatsapp: "",          /* Your number with country code and no symbols, e.g. 919876543210 */
+  price: "Free"
+};
+/* -------------------------------------- */
+(function(){
+  document.getElementById('priceText').textContent = CONFIG.price;
+  if (CONFIG.whatsapp){
+    var base = "https://wa.me/" + CONFIG.whatsapp + "?text=" + encodeURIComponent("Hi Migrant, I am moving to a new city and want to join.");
+    ['wa1','wa2'].forEach(function(id){ var a=document.getElementById(id); a.href=base; a.hidden=false; });
+  }
+  var d = document.getElementById('r-date');
+  try { d.min = new Date().toISOString().slice(0,10); } catch(e){}
+
+  function show(box, kind, text){ box.hidden=false; box.className='msg '+kind; box.textContent=text; }
+
+  function wire(formId, msgId, btnId, okText){
+    var form=document.getElementById(formId), box=document.getElementById(msgId), btn=document.getElementById(btnId);
+    form.addEventListener('submit', function(ev){
+      ev.preventDefault();
+      if(!form.checkValidity()){ form.reportValidity(); show(box,'err','Please fill in the highlighted fields and tick the consent box.'); return; }
+      var data={}; new FormData(form).forEach(function(v,k){ data[k]=v; });
+      data.submitted_at = new Date().toISOString();
+      data.page = location.href;
+      if(!CONFIG.endpoint){
+        show(box,'ok','Preview mode: the form works, but nothing was sent because no form backend is connected yet.');
+        return;
+      }
+      btn.disabled=true; var old=btn.textContent; btn.textContent='Sending…';
+      fetch(CONFIG.endpoint,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(data)})
+        .then(function(r){ if(!r.ok) throw new Error('bad status'); show(box,'ok',okText); form.reset(); })
+        .catch(function(){ show(box,'err','We could not send that. Check your connection and try again, or message us on WhatsApp.'); })
+        .then(function(){ btn.disabled=false; btn.textContent=old; });
+    });
+  }
+  wire('reserveForm','r-msg','r-btn','You are on the list. We will message you on WhatsApp when your area opens.');
+  wire('partnerForm','p-msg','p-btn','Thanks. We will call you within two working days.');
+})();
+</script>
+
+</html>
