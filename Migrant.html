@@ -1,0 +1,499 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Migrant</title>
+<meta name="description" content="Migrant is a free local community for people moving to Pune: real PG and tiffin prices, verified places, scam alerts and local answers.">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=DM+Sans:wght@400;500;700&display=swap">
+<style>
+/* Layout: dark teal hero with a floating price card, then a filterable PG price board, tiffin cards, area price guide, waitlist. */
+:root{
+  --bg:#F3F8F6; --surface:#FFFFFF; --ink:#0F2A28; --muted:#4B6663; --line:#D5E5E0;
+  --teal:#0B3D3A; --teal-2:#115A55; --gold:#FFB627; --gold-ink:#3A2600; --coral:#C93E1E; --coral-soft:#FFE6DE; --mint:#D4EFE6; --mint-ink:#0B4A42;
+  --hero-ink:#F2FBF8; --hero-muted:#B5D6CF;
+  --f-display:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif; --f-body:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0A1A19; --surface:#112B29; --ink:#E8F4F1; --muted:#9DBDB8; --line:#1F4440;
+  --coral:#FF8A6B; --coral-soft:#3A201A; --mint:#16423C; --mint-ink:#BDEBDD; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0A1A19; --surface:#112B29; --ink:#E8F4F1; --muted:#9DBDB8; --line:#1F4440;
+  --coral:#FF8A6B; --coral-soft:#3A201A; --mint:#16423C; --mint-ink:#BDEBDD; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:400 16px/1.55 var(--f-body);padding-block:0;padding-inline:0}
+h1,h2,h3{font-family:var(--f-display);line-height:1.08;text-wrap:balance;margin:0}
+p{margin:0}
+.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;padding:13px 22px;font:700 15px var(--f-body);background:var(--gold);color:var(--gold-ink);cursor:pointer;text-decoration:none;transition:transform .15s}
+.btn:hover{transform:translateY(-2px)}
+.btn.ghost{background:transparent;color:var(--hero-ink);box-shadow:inset 0 0 0 2px rgba(255,255,255,.35)}
+.eyebrow{font:700 12px var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--coral)}
+
+/* hero */
+.hero{background:radial-gradient(900px 500px at 85% 10%,var(--teal-2),transparent 70%),var(--teal);color:var(--hero-ink);overflow:hidden}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:20px}
+.logo{font:800 24px var(--f-display);display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo i{width:30px;height:30px;border-radius:9px 9px 9px 2px;background:var(--gold);display:grid;place-items:center}
+.nav nav{display:flex;gap:22px;font-size:14px;color:var(--hero-muted)}
+.nav nav a{text-decoration:none}
+.nav nav a:hover{color:var(--hero-ink)}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center;padding-block:28px 72px}
+.hero h1{font-size:clamp(38px,6vw,68px);font-weight:800;letter-spacing:-.02em}
+.hero h1 em{font-style:normal;color:var(--gold)}
+.hero .lede{margin-top:18px;font-size:18px;color:var(--hero-muted);max-width:48ch}
+.join{display:flex;gap:10px;margin-top:28px;flex-wrap:wrap}
+.join input,.join select,.form input,.form select{font:500 15px var(--f-body);padding:13px 16px;border-radius:12px;border:2px solid transparent;background:#fff;color:#0F2A28;min-width:0}
+.join input{flex:1 1 200px}
+.join select{flex:0 1 150px}
+.fine{margin-top:12px;font-size:13px;color:var(--muted)}
+.hero .fine{color:var(--hero-muted)}
+.msg{margin-top:12px;font-weight:700;color:var(--gold)}
+.trust{display:flex;gap:22px;flex-wrap:wrap;margin-top:26px;font-size:14px;color:var(--hero-muted)}
+.trust b{display:block;font:800 22px var(--f-display);color:var(--hero-ink)}
+
+.float{position:relative;max-width:420px;margin-inline:auto;width:100%}
+.float .card{transform:rotate(2.5deg);box-shadow:0 30px 60px rgba(0,0,0,.35)}
+.chip-float{position:absolute;background:var(--gold);color:var(--gold-ink);font:700 14px var(--f-body);padding:10px 14px;border-radius:14px;box-shadow:0 12px 24px rgba(0,0,0,.3)}
+.chip-float.a{left:-14px;bottom:70px;transform:rotate(-4deg)}
+.chip-float.b{right:-8px;top:-14px;background:#fff;color:#0F2A28;transform:rotate(3deg)}
+
+/* sections */
+section{padding-block:72px}
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:28px}
+.head h2{font-size:clamp(28px,4vw,42px);font-weight:800;margin-top:8px;max-width:20ch}
+.head p{color:var(--muted);max-width:44ch}
+.tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:24px}
+.tab{border:2px solid var(--line);background:var(--surface);color:var(--ink);font:700 14px var(--f-body);padding:9px 16px;border-radius:999px;cursor:pointer}
+.tab[aria-pressed="true"]{background:var(--teal);border-color:var(--teal);color:#fff}
+.sort{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:14px;color:var(--muted)}
+.sort select{font:500 14px var(--f-body);padding:9px 12px;border-radius:10px;border:2px solid var(--line);background:var(--surface);color:var(--ink)}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:22px}
+.card{background:var(--surface);border-radius:20px;overflow:hidden;border:1px solid var(--line);display:flex;flex-direction:column;min-width:0}
+.pic{position:relative;aspect-ratio:16/10;background:var(--mint)}
+.pic svg,.pic img{width:100%;height:100%;display:block;object-fit:cover}
+.tag{position:absolute;top:12px;left:12px;background:rgba(11,61,58,.92);color:#fff;font:700 12px var(--f-body);padding:5px 10px;border-radius:999px}
+.tag.v{left:auto;right:12px;background:var(--gold);color:var(--gold-ink)}
+.body{padding:18px;display:flex;flex-direction:column;gap:14px;flex:1}
+.body h3{font-size:21px;font-weight:700}
+.where{font-size:14px;color:var(--muted)}
+.prices{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.price{background:var(--mint);color:var(--mint-ink);border-radius:14px;padding:10px 8px;text-align:center;min-width:0}
+.price svg{width:44px;height:20px;display:block;margin:0 auto 4px}
+.price small{display:block;font-size:11px;font-weight:700;letter-spacing:.02em;line-height:1.2;min-height:2.4em}
+.price strong{display:block;font:800 19px var(--f-display);font-variant-numeric:tabular-nums}
+.price span{font-size:11px;opacity:.8}
+.tiffin-row{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--coral-soft);color:var(--coral);border-radius:14px;padding:10px 14px;font-size:14px;font-weight:700}
+.tiffin-row strong{font:800 18px var(--f-display);font-variant-numeric:tabular-nums;white-space:nowrap}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips span{font-size:12px;font-weight:500;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:3px 10px}
+.card .btn{margin-top:auto;background:var(--teal);color:#fff;padding:11px 18px;font-size:14px}
+.note{margin-top:22px;font-size:13px;color:var(--muted)}
+
+.tiffin-band{background:var(--teal);color:var(--hero-ink)}
+.tiffin-band .head p{color:var(--hero-muted)}
+.tiffin-band .eyebrow{color:var(--gold)}
+.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px}
+.tcard{background:var(--teal-2);border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.tcard svg{width:100%;height:110px}
+.tcard h3{font-size:19px}
+.tcard .big{font:800 30px var(--f-display);color:var(--gold);font-variant-numeric:tabular-nums}
+.tcard .big small{font:500 13px var(--f-body);color:var(--hero-muted)}
+.tcard p{font-size:14px;color:var(--hero-muted)}
+
+.tablewrap{overflow-x:auto;border-radius:18px;border:1px solid var(--line);background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:620px;font-variant-numeric:tabular-nums}
+th,td{padding:14px 18px;text-align:left;border-bottom:1px solid var(--line);font-size:15px}
+th{font:700 12px var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--mint)}
+tr:last-child td{border-bottom:0}
+td:first-child{font-weight:700}
+
+.why{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+.why div{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:22px}
+.why .ic{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;margin-bottom:14px}
+.why h3{font-size:20px;margin-bottom:6px}
+.why p{color:var(--muted);font-size:15px}
+
+.cta{background:linear-gradient(135deg,var(--coral) 0,#E8772B 55%,var(--gold) 100%);color:#2B0F05;text-align:center}
+.cta h2{font-size:clamp(30px,5vw,50px);font-weight:800;max-width:18ch;margin-inline:auto}
+.cta p{margin:14px auto 0;max-width:46ch;font-size:17px}
+.cta .join{justify-content:center}
+.cta .btn{background:#0B3D3A;color:#fff}
+.cta .msg{color:#2B0F05}
+footer{padding-block:28px;font-size:13px;color:var(--muted)}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+@media(max-width:860px){.hero-grid{grid-template-columns:1fr;padding-bottom:56px}.nav nav{display:none}.sort{margin-left:0}section{padding-block:52px}}
+@media(prefers-reduced-motion:reduce){.btn{transition:none}}
+
+/* shared form + community styles (from the first Migrant page) */
+:root{--danger:#B3261E}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--danger:#FF8A80}}
+:root[data-theme="dark"]{--danger:#FF8A80}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.ticks{list-style:none;padding:0;margin:26px 0 0;display:grid;gap:10px;color:var(--hero-muted);font-size:16px}
+.ticks li{display:flex;gap:12px;align-items:flex-start}
+.ticks li::before{content:"";flex:none;width:22px;height:22px;margin-top:2px;border-radius:50%;background:var(--gold) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12.5l4 4 8-9' fill='none' stroke='%233A2600' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/16px no-repeat}
+.cta .ticks{color:#2B0F05}
+.cta .ticks li::before{background-color:#0B3D3A;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12.5l4 4 8-9' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
+.fcard{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:20px;padding:26px;text-align:left}
+.fcard h3{font-size:26px}
+.fcard .sub{margin-top:6px;color:var(--muted);font-size:15px}
+.fcard form{display:grid;gap:14px;margin-top:18px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.fcard label{display:grid;gap:6px;font-size:14px;font-weight:700;min-width:0}
+.fcard input,.fcard select{width:100%;min-height:46px;padding:10px 12px;border-radius:10px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);font:400 16px var(--f-body)}
+.fcard input:focus,.fcard select:focus{border-color:var(--teal-2)}
+.fcard .check{display:flex;gap:10px;align-items:flex-start;font-weight:400;font-size:13px;color:var(--muted)}
+.fcard .check input{width:20px;min-height:20px;margin-top:2px;flex:none}
+.fcard .btn{background:var(--teal);color:#fff;min-height:48px}
+.fcard .btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 2px var(--line)}
+.fcard .msg{margin:0;padding:14px 16px;border-radius:12px;font-size:15px;font-weight:500;color:var(--ink)}
+.msg.ok{background:var(--mint);border:1px solid var(--teal-2)}
+.msg.err{background:var(--coral-soft);border:1px solid var(--danger)}
+.band{padding-block:72px}
+.alt{background:var(--surface);border-block:1px solid var(--line)}
+.sec-head{max-width:32em}
+.sec-head h2{font-size:clamp(28px,4vw,42px);font-weight:800;margin-top:8px}
+.sec-head p{margin-top:12px;color:var(--muted)}
+.feed{margin-top:32px;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px}
+.post{background:var(--bg);border:1px solid var(--line);border-radius:18px;padding:20px;display:grid;gap:10px;align-content:start;min-width:0}
+.pill{display:inline-block;width:fit-content;font:700 11px var(--f-body);letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:999px;background:var(--gold);color:var(--gold-ink)}
+.pill.alert{background:transparent;border:1.5px solid var(--danger);color:var(--danger)}
+.pill.soft{background:var(--mint);color:var(--mint-ink)}
+.post .text{font-weight:500}
+.post .reply{border-left:3px solid var(--gold);padding-left:12px;color:var(--muted);font-size:15px}
+.post .meta{font-size:13px;color:var(--muted)}
+.signals{margin-top:32px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:0 48px}
+.signals div{padding-block:18px;border-top:1px solid rgba(255,255,255,.2);display:grid;grid-template-columns:104px 1fr;gap:6px 16px}
+.signals b{font:700 12px var(--f-body);color:var(--gold);letter-spacing:.1em;text-transform:uppercase;padding-top:5px}
+.signals span{color:var(--hero-muted)}
+.signals strong{color:var(--hero-ink);display:block}
+.dark{background:var(--teal);color:var(--hero-ink)}
+.dark .eyebrow{color:var(--gold)}
+.dark h2{font-size:clamp(28px,4vw,42px);font-weight:800;margin-top:8px;max-width:20em}
+.pack{margin-top:32px;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.pack article{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:22px}
+.pack h3{font-size:21px}
+.pack p{margin-top:8px;color:var(--muted);font-size:15px}
+.pack .tg{display:inline-block;margin-top:12px;font:700 11px var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--coral)}
+.steps{margin-top:32px;list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;counter-reset:s}
+.steps li{counter-increment:s;background:var(--mint);color:var(--mint-ink);border-radius:20px;padding:24px}
+.steps li::before{content:"Step " counter(s);font:700 12px var(--f-body);letter-spacing:.1em;text-transform:uppercase}
+.steps h3{font-size:22px;margin-top:8px}
+.steps p{margin-top:8px;font-size:15px}
+.partner{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+.partner ul{margin:18px 0 0;padding-left:20px;color:var(--muted)}
+.partner li{margin-top:8px}
+.partner h2{font-size:clamp(28px,4vw,42px);font-weight:800;margin-top:8px}
+.faq{margin-top:26px;max-width:760px}
+details{border-top:1px solid var(--line);padding-block:16px}
+details:last-of-type{border-bottom:1px solid var(--line)}
+summary{cursor:pointer;font-weight:700;font-size:17px}
+details p{margin-top:10px;color:var(--muted)}
+.join-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;text-align:left}
+.join-grid h2{margin-inline:0;max-width:16ch}
+.join-grid p.lead{margin:14px 0 0;max-width:40ch}
+html{scroll-behavior:smooth}
+.cta .fcard .sub{margin:6px 0 0;max-width:none;font-size:15px;color:var(--muted)}
+@media(max-width:860px){.partner,.join-grid{grid-template-columns:1fr;gap:28px}.band{padding-block:52px}}
+@media(max-width:480px){.row2{grid-template-columns:1fr}.signals div{grid-template-columns:1fr}.fcard{padding:20px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="nav">
+      <a class="logo" href="#top"><i><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3A2600" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V6l8 9 8-9v14"/></svg></i>Migrant</a>
+      <nav aria-label="Main"><a href="#pgs">PG prices</a><a href="#tiffin">Tiffin</a><a href="#inside">Community</a><a href="#partners">Guides and businesses</a></nav>
+      <a class="btn" href="#join">Join free</a>
+    </div>
+    <div class="hero-grid" id="top">
+      <div>
+        <p class="eyebrow" style="color:var(--gold)">Free for newcomers · Pune first</p>
+        <h1>Your new city, explained by people <em>who live in it.</em></h1>
+        <p class="lede">See the real price of a sharing bed, double sharing, single room and monthly tiffin in every Pune area. Ask locals, spot scams before they cost you, and see what is opening and hiring near you.</p>
+        <ul class="ticks">
+          <li>Rent and tiffin prices reported by residents, not brokers</li>
+          <li>Verified places and honest reviews from people who lived there</li>
+          <li>A live feed of new PGs, shops, tiffin services and jobs in your area</li>
+        </ul>
+        <div class="hero-cta"><a class="btn" href="#join">Join the free waitlist</a><a class="btn ghost" href="#pgs">See PG prices</a></div>
+        <p class="fine">No subscription and no fee to join or use. We earn from businesses, not from you.</p>
+        <div class="trust"><div><b>6</b>Pune areas</div><div><b>3</b>room types priced</div><div><b>Free</b>for newcomers</div></div>
+      </div>
+      <div class="float" aria-hidden="true">
+        <div class="card"><div class="pic" id="heroPic"></div>
+          <div class="body"><h3>Double sharing, Kharadi</h3>
+            <div class="prices"><div class="price"><small>Sharing bed</small><strong>₹6,500</strong></div><div class="price"><small>Double</small><strong>₹8,500</strong></div><div class="price"><small>Single</small><strong>₹13,000</strong></div></div></div></div>
+        <div class="chip-float a">Tiffin from ₹1,700/mo</div>
+        <div class="chip-float b">Verified by residents</div>
+      </div>
+    </div>
+  </div>
+</header>
+<section id="pgs">
+  <div class="wrap">
+    <div class="head">
+      <div><p class="eyebrow">PG price board</p><h2>What a bed really costs, area by area</h2></div>
+      <p>Monthly rent per person. Pick your area and compare sharing, double and single rooms side by side.</p>
+    </div>
+    <div class="tools">
+      <div id="areaTabs" role="group" aria-label="Filter by area" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+      <label class="sort">Sort by <select id="sort"><option value="double">Double sharing, low to high</option><option value="single">Single room, low to high</option><option value="share">Sharing bed, low to high</option></select></label>
+    </div>
+    <div class="grid" id="pgGrid"></div>
+    <p class="note">Sample prices for Pune, shown to illustrate the board. Real listings go live once residents and owners verify them.</p>
+  </div>
+</section>
+
+<section class="tiffin-band" id="tiffin">
+  <div class="wrap">
+    <div class="head">
+      <div><p class="eyebrow">Tiffin services</p><h2>Home food, priced per month</h2></div>
+      <p>Compare plans before you commit. Most services offer a one day trial.</p>
+    </div>
+    <div class="tgrid" id="tGrid"></div>
+    <p class="note" style="color:var(--hero-muted)">Sample plans. Prices vary by area and menu.</p>
+  </div>
+</section>
+
+<section id="guide">
+  <div class="wrap">
+    <div class="head">
+      <div><p class="eyebrow">Pune area guide</p><h2>Price range at a glance</h2></div>
+      <p>The lowest to highest rent we list in each area, plus the usual tiffin rate.</p>
+    </div>
+    <div class="tablewrap"><table><thead><tr><th>Area</th><th>Sharing bed</th><th>Double sharing</th><th>Single room</th><th>Tiffin (2 meals)</th></tr></thead><tbody id="guideBody"></tbody></table></div>
+  </div>
+</section>
+
+
+<section class="band alt" id="inside">
+  <div class="wrap">
+    <div class="sec-head"><p class="eyebrow">Inside Migrant</p><h2>A community feed built around where you live.</h2><p>Locals answer, residents report prices and scams, and your area shows what is new. These are example posts that show how Migrant will work.</p></div>
+    <div class="feed">
+      <article class="post"><span class="pill">Ask a local</span><p class="text">Moving to Hinjewadi next week. How do I check a PG is genuine before I pay the deposit?</p><p class="reply"><b>Local guide:</b> Visit in person, ask for a written agreement, and speak to a current tenant before you pay anything.</p><p class="meta">Example post</p></article>
+      <article class="post"><span class="pill soft">Fare check</span><p class="text">The auto driver from the bus stop to my PG refused the meter and quoted a fixed price at night. Is that normal?</p><p class="reply"><b>Resident:</b> Ask for the meter first. Add what you actually paid so the next newcomer on this route knows the usual fare.</p><p class="meta">Example post</p></article>
+      <article class="post"><span class="pill alert">Scam alert</span><p class="text">A broker asked for a fee before showing any flat. Several residents have reported the same number this week.</p><p class="reply"><b>Local guide:</b> Never pay before a viewing. We have added this number to the warning list.</p><p class="meta">Example post</p></article>
+      <article class="post"><span class="pill soft">New nearby</span><p class="text">A new tiffin service just opened in Kharadi. Early members get a free trial meal.</p><p class="reply">Reviews from people who have eaten there appear below the post once they have tried it.</p><p class="meta">Example post</p></article>
+      <article class="post"><span class="pill soft">Hiring nearby</span><p class="text">Three companies near Baner posted junior roles this week.</p><p class="reply">See what skills are in demand around you and who is hiring close to home.</p><p class="meta">Example post</p></article>
+      <article class="post"><span class="pill soft">Meet people</span><p class="text">Saturday morning walk and coffee for newcomers. Open to everyone who just moved.</p><p class="reply">Hosted by a local guide in a public place, so nobody has to arrive alone.</p><p class="meta">Example post</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="dark band" aria-labelledby="sig-h">
+  <div class="wrap">
+    <p class="eyebrow">Why newcomers need this</p>
+    <h2 id="sig-h">The first month is where people lose money and feel alone.</h2>
+    <div class="signals">
+      <div><b>Scammed</b><span><strong>Brokers and fake listings</strong>Verified places and reviews from people who lived there, so you can check before you pay.</span></div>
+      <div><b>Overcharged</b><span><strong>Fares and prices set by who looks new</strong>Prices by area, reported by residents, so you know what is fair.</span></div>
+      <div><b>Lonely</b><span><strong>No friends, no one to ask</strong>A community of locals and fellow newcomers, with meetups in public places.</span></div>
+      <div><b>Lost</b><span><strong>No idea what is around you</strong>A live feed of what is opening, hiring and happening in your area.</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="features">
+  <div class="wrap">
+    <div class="sec-head"><p class="eyebrow">What you get, free</p><h2>Everything a newcomer needs to settle in, in one place.</h2></div>
+    <div class="pack">
+      <article><h3>Ask locals anything</h3><p>Post a question and get answers from people who live in your area, with local guides stepping in when it matters.</p><span class="tg">Community</span></article>
+      <article><h3>Verified places and reviews</h3><p>PGs, flats, landlords, tiffin services and shops with honest reviews from people who actually used them.</p><span class="tg">Trust</span></article>
+      <article><h3>What is happening near you</h3><p>New openings, vacancies, jobs in demand, events and alerts for your area, so there is always something new to see.</p><span class="tg">Live feed</span></article>
+      <article><h3>Fair prices and fares</h3><p>Rent, deposits, autos, cabs and tiffins by area, reported by residents, so you can spot overcharging.</p><span class="tg">Transparency</span></article>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="how" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head"><p class="eyebrow">How it works</p><h2>From new in town to local, in three steps.</h2></div>
+    <ol class="steps">
+      <li><h3>Join</h3><p>Tell us where you are moving and when. It is free.</p></li>
+      <li><h3>Ask, check and explore</h3><p>Get answers, check places and prices, and follow what is happening in your area.</p></li>
+      <li><h3>Settle in and give back</h3><p>Share what you learn, help the next newcomer and become part of the neighbourhood.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="band alt" id="partners">
+  <div class="wrap partner">
+    <div>
+      <p class="eyebrow">For local guides and businesses</p>
+      <h2>Run your area, or reach the people in it.</h2>
+      <ul>
+        <li>Local guides: run the community in your area, help newcomers and earn a share of the local revenue it creates.</li>
+        <li>PGs, shops and tiffin services: list your rooms and plans and reach newcomers who are deciding where to live and eat.</li>
+        <li>Employers and colleges: onboard new joiners and post roles in the area.</li>
+      </ul>
+      <p class="fine" style="margin-top:18px">Launching first in Pune: Hinjewadi, Kharadi and Baner.</p>
+    </div>
+    <div class="fcard" style="background:var(--bg)">
+      <h3>Get in touch</h3>
+      <form id="partnerForm" novalidate>
+        <input type="hidden" name="type" value="partner">
+        <label for="p-name">Your name<input id="p-name" name="name" type="text" autocomplete="name" required></label>
+        <label for="p-phone">WhatsApp number<input id="p-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+91" required></label>
+        <label for="p-role">You are a
+          <select id="p-role" name="role"><option>Local guide (run an area)</option><option>PG owner or landlord</option><option>Tiffin service or shop</option><option>HR or relocation team</option><option>College or institute</option></select></label>
+        <label for="p-org">Business, area or organisation<input id="p-org" name="organisation" type="text" autocomplete="organization"></label>
+        <label class="check" for="p-consent"><input id="p-consent" name="consent" type="checkbox" required><span>I agree that Migrant may store these details and contact me.</span></label>
+        <button class="btn" type="submit" id="p-btn">Request a call</button>
+        <div id="p-msg" class="msg" role="status" aria-live="polite" hidden></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <div class="sec-head"><p class="eyebrow">Questions</p><h2>Before you join.</h2></div>
+    <div class="faq">
+      <details><summary>Does it cost anything?</summary><p>No. Migrant is free for everyone who joins. There is no subscription and no fee to use it.</p></details>
+      <details><summary>How does Migrant earn money?</summary><p>Local businesses, PGs and employers pay to reach people on Migrant, and local guides share in the revenue their area creates. Newcomers never pay.</p></details>
+      <details><summary>Are the prices on this page real?</summary><p>They are samples that show how the board will look. Real prices appear once residents and owners confirm them, and each listing shows how many people verified it.</p></details>
+      <details><summary>How do you keep listings and reviews honest?</summary><p>Places are checked before they are marked verified, reviews come from verified members who have used the place, and local guides moderate each area.</p></details>
+      <details><summary>Which areas do you cover?</summary><p>We start with Hinjewadi, Kharadi and Baner in Pune, then add more areas and cities based on demand.</p></details>
+      <details><summary>What happens to my details?</summary><p>We collect only what is needed to contact you and set up your area. We do not sell your information, and you can ask us to delete it at any time.</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="cta band" id="join">
+  <div class="wrap join-grid">
+    <div>
+      <h2>Moving to Pune? Get the price sheet first.</h2>
+      <p class="lead">Join the free waitlist. We will send rent and tiffin rates for your area and invite you as soon as it opens.</p>
+      <ul class="ticks"><li>Free for newcomers, always</li><li>Rates for sharing, double and single rooms</li><li>Scam warnings for your area</li></ul>
+    </div>
+    <div class="fcard">
+      <h3>Join the waitlist</h3>
+      <p class="sub">Tell us when you arrive.</p>
+      <form id="reserveForm" novalidate>
+        <input type="hidden" name="type" value="newcomer">
+        <label for="r-name">Full name<input id="r-name" name="name" type="text" autocomplete="name" required></label>
+        <label for="r-phone">WhatsApp number<input id="r-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+91" required></label>
+        <div class="row2">
+          <label for="r-date">Arrival date<input id="r-date" name="arrival" type="date" required></label>
+          <label for="r-as">I am moving as<select id="r-as" name="moving_as"><option>A new job</option><option>College or course</option><option>Internship</option><option>Something else</option></select></label>
+        </div>
+        <label for="r-org">Employer or college<input id="r-org" name="organisation" type="text" autocomplete="organization"></label>
+        <label for="r-area">Area you are moving to<select id="r-area" name="area"><option>Hinjewadi</option><option>Kharadi</option><option>Baner</option><option>Wakad</option><option>Viman Nagar</option><option>Kothrud</option><option>Another Pune area</option></select></label>
+        <label class="check" for="r-consent"><input id="r-consent" name="consent" type="checkbox" required><span>I agree that Migrant may store these details and contact me on WhatsApp about my move.</span></label>
+        <button class="btn" type="submit" id="r-btn">Join free</button>
+        <div id="r-msg" class="msg" role="status" aria-live="polite" hidden></div>
+        <a class="btn ghost" id="wa1" href="#" target="_blank" rel="noopener" hidden>Chat on WhatsApp instead</a>
+      </form>
+    </div>
+  </div>
+</section>
+<footer><div class="wrap"><span>Migrant · Pune, free for people moving to a new city</span><span>Prices shown are samples until verified. <a id="wa2" href="#" target="_blank" rel="noopener" hidden>Talk to us on WhatsApp</a></span></div></footer>
+<script>
+/* ---- Edit these before you deploy ---- */
+var CONFIG={
+  endpoint:"",   /* Form backend URL (Formspree, Web3Forms or a Google Apps Script). Leave empty for preview mode. */
+  whatsapp:""    /* Your number with country code and no symbols, e.g. 919876543210 */
+};
+/* -------------------------------------- */
+/* Sample listings: replace with verified ones */
+var PGS=[
+ {name:"Green Leaf Residency",area:"Hinjewadi",where:"Phase 1, near the IT park shuttle stop",share:5500,dbl:7500,single:11000,tiffin:3200,wall:"#BFE3D6",bed:"#0B3D3A",amen:["WiFi","Meals optional","Power backup","Laundry"],ver:34,photo:""},
+ {name:"Sunrise Nest PG",area:"Kharadi",where:"Near EON IT Park road",share:6500,dbl:8500,single:13000,tiffin:3600,wall:"#FFD9A8",bed:"#C93E1E",amen:["WiFi","AC rooms","Meals","Housekeeping"],ver:52,photo:""},
+ {name:"Baner Hub Stay",area:"Baner",where:"Close to Baner Road cafes",share:7000,dbl:9500,single:14500,tiffin:3800,wall:"#CFE0FF",bed:"#2A5BD7",amen:["WiFi","AC rooms","Gym access","Laundry"],ver:41,photo:""},
+ {name:"Lakeside Rooms",area:"Viman Nagar",where:"10 minutes from the airport road",share:6800,dbl:9000,single:13500,tiffin:3500,wall:"#F6CFE0",bed:"#9B2C6B",amen:["WiFi","Meals optional","Power backup"],ver:28,photo:""},
+ {name:"Kothrud Student Home",area:"Kothrud",where:"Walkable to colleges and the market",share:5800,dbl:7800,single:11500,tiffin:3000,wall:"#E7E1B3",bed:"#6B5B00",amen:["WiFi","Study desk","Meals","Laundry"],ver:46,photo:""},
+ {name:"Wakad Corner PG",area:"Wakad",where:"Near the Hinjewadi flyover",share:5200,dbl:7200,single:10500,tiffin:3000,wall:"#D8F0C4",bed:"#2F7A1F",amen:["WiFi","Meals optional","Parking"],ver:19,photo:""}
+];
+var TIFFINS=[
+ {name:"Home-style veg thali",mo:3200,meal:"lunch and dinner",note:"Roti, sabzi, dal, rice. Menu changes daily.",trial:80,c:"#FFB627"},
+ {name:"Lunch only, veg",mo:1700,meal:"lunch",note:"A good fit if you eat dinner out.",trial:70,c:"#7FD6B8"},
+ {name:"Non-veg plan",mo:4200,meal:"lunch and dinner",note:"Chicken or egg curry four days a week.",trial:110,c:"#FF8A6B"},
+ {name:"Light and Jain",mo:3500,meal:"lunch and dinner",note:"Less oil, no onion or garlic on request.",trial:90,c:"#A9C4FF"}
+];
+var AREAS=["All"].concat(PGS.map(function(p){return p.area}));
+var state={area:"All",sort:"double"};
+var inr=function(n){return "₹"+n.toLocaleString("en-IN")};
+
+function bedGlyph(n){var s='<svg viewBox="0 0 48 20" fill="none">';for(var i=0;i<n;i++){var x=2+i*(44/n);var w=44/n-3;s+='<rect x="'+x+'" y="9" width="'+w+'" height="7" rx="2" fill="currentColor"/><rect x="'+x+'" y="4" width="'+Math.min(8,w)+'" height="6" rx="2" fill="currentColor" opacity=".55"/>'}return s+'</svg>'}
+
+function roomSVG(p,beds){
+  var wall=p.wall,bed=p.bed,i,s='<svg viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Illustration of a PG room"><rect width="320" height="200" fill="'+wall+'"/>';
+  s+='<polygon points="0,150 320,150 320,200 0,200" fill="#000" opacity=".14"/>';
+  s+='<rect x="212" y="26" width="84" height="82" rx="6" fill="#9ED8F5" stroke="#fff" stroke-width="5"/><path d="M254 26v82M212 67h84" stroke="#fff" stroke-width="4"/><circle cx="276" cy="48" r="9" fill="#FFE27A"/><rect x="204" y="20" width="14" height="96" rx="5" fill="'+bed+'" opacity=".85"/><rect x="290" y="20" width="14" height="96" rx="5" fill="'+bed+'" opacity=".85"/>';
+  var bw=beds===3?58:beds===2?74:120,gap=beds===3?6:12,x0=14;
+  for(i=0;i<beds;i++){var x=x0+i*(bw+gap),y=beds===1?112:118;
+    s+='<rect x="'+x+'" y="'+(y-30)+'" width="'+bw+'" height="'+(beds===1?48:42)+'" rx="8" fill="'+bed+'"/>';
+    s+='<rect x="'+(x+4)+'" y="'+(y-4)+'" width="'+(bw-8)+'" height="34" rx="8" fill="#fff"/>';
+    s+='<rect x="'+(x+6)+'" y="'+(y-1)+'" width="'+Math.min(34,bw*.42)+'" height="14" rx="6" fill="#EDEDED"/>';
+    s+='<rect x="'+(x+4)+'" y="'+(y+12)+'" width="'+(bw-8)+'" height="18" rx="6" fill="'+bed+'" opacity=".78"/>';
+    s+='<rect x="'+(x+6)+'" y="'+(y+28)+'" width="6" height="14" fill="#5A3B1E"/><rect x="'+(x+bw-12)+'" y="'+(y+28)+'" width="6" height="14" fill="#5A3B1E"/>'}
+  s+='<rect x="228" y="130" width="76" height="8" rx="3" fill="#8A5A2B"/><rect x="234" y="138" width="6" height="40" fill="#6B431C"/><rect x="292" y="138" width="6" height="40" fill="#6B431C"/>';
+  s+='<rect x="244" y="112" width="40" height="18" rx="3" fill="#2B3A3A"/><rect x="248" y="115" width="32" height="11" rx="2" fill="#7FD6B8"/>';
+  s+='<rect x="190" y="150" width="14" height="22" rx="3" fill="#C93E1E"/><path d="M197 150c-10-14 4-20 0-30 10 6 12 20 0 30z" fill="#2F7A1F"/>';
+  return s+'</svg>'}
+
+function tiffinSVG(c){
+  return '<svg viewBox="0 0 240 110" role="img" aria-label="Illustration of a tiffin box"><ellipse cx="120" cy="100" rx="70" ry="6" fill="#000" opacity=".2"/><path d="M82 8c0-8 76-8 76 0" stroke="#E8F4F1" stroke-width="5" fill="none" stroke-linecap="round"/><rect x="82" y="8" width="76" height="22" rx="7" fill="'+c+'"/><rect x="82" y="34" width="76" height="26" rx="7" fill="#E8F4F1"/><rect x="82" y="64" width="76" height="30" rx="7" fill="'+c+'"/><path d="M82 46h76M82 78h76" stroke="#0B3D3A" stroke-opacity=".25" stroke-width="2"/><rect x="116" y="2" width="8" height="10" rx="3" fill="#0B3D3A"/><circle cx="36" cy="64" r="26" fill="#E8F4F1"/><circle cx="36" cy="64" r="20" fill="'+c+'" opacity=".9"/><circle cx="30" cy="60" r="5" fill="#fff" opacity=".7"/><circle cx="42" cy="68" r="4" fill="#0B3D3A" opacity=".5"/><circle cx="198" cy="70" r="24" fill="#E8F4F1"/><path d="M180 70a18 18 0 0136 0z" fill="#FFB627"/><path d="M184 72c8-8 18-8 28 0" stroke="#fff" stroke-width="3" fill="none" opacity=".7"/></svg>'}
+
+function pgCard(p){
+  var pic=p.photo?'<img src="'+p.photo+'" alt="'+p.name+'" loading="lazy">':roomSVG(p,2);
+  return '<article class="card"><div class="pic">'+pic+'<span class="tag">'+p.area+'</span><span class="tag v">Verified by '+p.ver+'</span></div><div class="body"><div><h3>'+p.name+'</h3><p class="where">'+p.where+'</p></div>'
+   +'<div class="prices"><div class="price">'+bedGlyph(3)+'<small>Sharing bed</small><strong>'+inr(p.share)+'</strong><span>per month</span></div>'
+   +'<div class="price">'+bedGlyph(2)+'<small>Double sharing</small><strong>'+inr(p.dbl)+'</strong><span>per month</span></div>'
+   +'<div class="price">'+bedGlyph(1)+'<small>Single room</small><strong>'+inr(p.single)+'</strong><span>per month</span></div></div>'
+   +'<div class="tiffin-row"><span>Tiffin nearby, 2 meals</span><strong>'+inr(p.tiffin)+'/mo</strong></div>'
+   +'<div class="chips">'+p.amen.map(function(a){return '<span>'+a+'</span>'}).join('')+'</div>'
+   +'<a class="btn" href="#join">Ask residents about this PG</a></div></article>'}
+
+function renderTabs(){var el=document.getElementById('areaTabs');el.innerHTML=AREAS.map(function(a){return '<button class="tab" type="button" aria-pressed="'+(a===state.area)+'" data-area="'+a+'">'+a+'</button>'}).join('');
+  el.querySelectorAll('button').forEach(function(b){b.onclick=function(){state.area=b.dataset.area;renderTabs();renderPGs()}})}
+function renderPGs(){var key={double:'dbl',single:'single',share:'share'}[state.sort];
+  var list=PGS.filter(function(p){return state.area==="All"||p.area===state.area}).sort(function(a,b){return a[key]-b[key]});
+  document.getElementById('pgGrid').innerHTML=list.map(pgCard).join('')}
+document.getElementById('sort').onchange=function(e){state.sort=e.target.value;renderPGs()};
+
+document.getElementById('tGrid').innerHTML=TIFFINS.map(function(t){
+  return '<article class="tcard">'+tiffinSVG(t.c)+'<h3>'+t.name+'</h3><div class="big">'+inr(t.mo)+' <small>per month</small></div><p>'+t.meal+', about '+inr(Math.round(t.mo/(t.meal==="lunch"?30:60)))+' a meal.<br>'+t.note+'</p><p><b style="color:var(--gold)">Trial day '+inr(t.trial)+'</b></p></article>'}).join('');
+
+document.getElementById('guideBody').innerHTML=PGS.slice().sort(function(a,b){return a.dbl-b.dbl}).map(function(p){
+  return '<tr><td>'+p.area+'</td><td>'+inr(p.share)+'</td><td>'+inr(p.dbl)+'</td><td>'+inr(p.single)+'</td><td>'+inr(p.tiffin)+'</td></tr>'}).join('');
+
+document.getElementById('heroPic').innerHTML=roomSVG(PGS[1],2);
+renderTabs();renderPGs();
+
+
+document.getElementById('heroPic').innerHTML=roomSVG(PGS[1],2);
+renderTabs();renderPGs();
+
+(function(){
+  if(CONFIG.whatsapp){
+    var base="https://wa.me/"+CONFIG.whatsapp+"?text="+encodeURIComponent("Hi Migrant, I am moving to Pune and want to join.");
+    ['wa1','wa2'].forEach(function(id){var a=document.getElementById(id);a.href=base;a.hidden=false});
+  }
+  try{document.getElementById('r-date').min=new Date().toISOString().slice(0,10)}catch(e){}
+  function show(box,kind,text){box.hidden=false;box.className='msg '+kind;box.textContent=text}
+  function wire(formId,msgId,btnId,okText){
+    var form=document.getElementById(formId),box=document.getElementById(msgId),btn=document.getElementById(btnId);
+    form.addEventListener('submit',function(ev){
+      ev.preventDefault();
+      if(!form.checkValidity()){form.reportValidity();show(box,'err','Please fill in the highlighted fields and tick the consent box.');return}
+      var data={};new FormData(form).forEach(function(v,k){data[k]=v});
+      data.submitted_at=new Date().toISOString();data.page=location.href;
+      if(!CONFIG.endpoint){show(box,'ok','Preview mode: the form works, but nothing was sent because no form backend is connected yet.');return}
+      btn.disabled=true;var old=btn.textContent;btn.textContent='Sending…';
+      fetch(CONFIG.endpoint,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(data)})
+        .then(function(r){if(!r.ok)throw new Error('bad status');show(box,'ok',okText);form.reset()})
+        .catch(function(){show(box,'err','We could not send that. Check your connection and try again, or message us on WhatsApp.')})
+        .then(function(){btn.disabled=false;btn.textContent=old});
+    });
+  }
+  wire('reserveForm','r-msg','r-btn','You are on the list. We will message you on WhatsApp when your area opens.');
+  wire('partnerForm','p-msg','p-btn','Thanks. We will call you within two working days.');
+})();
+</script>
+
+</body></html>
